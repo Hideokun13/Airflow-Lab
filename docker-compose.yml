@@ -277,16 +277,5 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
-  jupyter:
-        image: 'jupyter/datascience-notebook:latest'
-        ports:
-            - '10000:8888'
-        volumes:
-        - jupyter_lab:/home/jovyan/work
-        container_name: jupyter
-        environment:
-            JUPYTER_ENABLE_LAB: 'yes'
-
 volumes:
   postgres-db-volume:
-  jupyter_lab:
