@@ -75,18 +75,20 @@ x-airflow-common:
       condition: service_healthy
 
 services:
-  postgres:
-    image: postgres:13
+  airflow-mysql:
+    container_name: airflow-mysql
+    image: mysql:5.7 # use this version to prevent "caching_sha2_password" issue
     environment:
-      POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
-      POSTGRES_DB: airflow
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: airflow
+      TZ: Asia/Bangkok
+    ports:
+      - 3306:3306
     volumes:
-      - postgres-db-volume:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "airflow"]
-      interval: 5s
-      retries: 5
+      - ./data:/var/lib/mysql
+      - ./database:/docker-entrypoint-initdb.d/:ro
+    cap_add:
+      - sys_nice
     restart: always
 
   redis:
