@@ -83,6 +83,10 @@ services:
       - POSTGRES_DB=airflow
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
 
   wiki_results:
     image: postgres:12-alpine
@@ -282,6 +286,3 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
-
-volumes:
-  postgres-db-volume:
